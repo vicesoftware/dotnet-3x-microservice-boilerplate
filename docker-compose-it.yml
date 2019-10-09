@@ -1,0 +1,50 @@
+version: "2.4"
+services:
+  db:
+    image: postgres:12.0-alpine
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d
+    ports:
+      - 5432
+    environment:
+      POSTGRES_DB: sampledb
+      POSTGRES_USER: pguser
+      POSTGRES_PASSWORD: topsecret
+    healthcheck: 
+      test: nc -z localhost 5432 || exit -1
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+  api:
+    image: acme/api:1.0
+    build: api
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes: 
+      - ./api:/app
+    ports:
+      - 5000:5000
+    command: dotnet watch run
+    healthcheck: 
+      test: curl --fail localhost:5000/api/values
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+  tests:
+    image: acme/integration-tests:1.0
+    build: integration-tests
+    depends_on:
+      api:
+        condition: service_healthy
+    volumes:
+      - ./integration-tests:/usr/src/app
+    command: npm run watch
+
+volumes:
+  pg-data:

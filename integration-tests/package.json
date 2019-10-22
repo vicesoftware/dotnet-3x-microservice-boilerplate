@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "test": "jasmine",
-    "watch": "nodemon --exec jasmine --watch spec"
+    "watch": "nodemon -L --exec jasmine --watch spec"
   },
   "keywords": [
     "integration-tests"

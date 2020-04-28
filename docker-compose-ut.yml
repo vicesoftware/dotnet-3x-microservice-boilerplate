@@ -11,14 +11,26 @@ services:
       POSTGRES_DB: sampledb
       POSTGRES_USER: pguser
       POSTGRES_PASSWORD: topsecret
+    tty: true
+    healthcheck:
+      test: nc -z localhost 5432 || exit -1
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
 
   api:
     image: acme/api:1.0
+    build: api
+    depends_on:
+      db:
+        condition: service_healthy
     volumes: 
       - ./api:/app/api
       - ./tests:/app/tests
     ports:
       - 5000:5000
+    tty: true
     command:
       dotnet watch --project tests test
 

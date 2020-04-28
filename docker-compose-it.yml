@@ -29,6 +29,7 @@ services:
     ports:
       - 5000:5000
     command: dotnet watch run
+    tty: true
     healthcheck: 
       test: curl --fail localhost:5000/api/values
       interval: 5s
@@ -44,6 +45,7 @@ services:
         condition: service_healthy
     volumes:
       - ./integration-tests:/usr/src/app
+    tty: true
     command: npm run watch
 
 volumes:

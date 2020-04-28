@@ -7,6 +7,7 @@ services:
       - ./db/init:/docker-entrypoint-initdb.d
     ports:
       - 5432
+    tty: true
     environment:
       POSTGRES_DB: sampledb
       POSTGRES_USER: pguser

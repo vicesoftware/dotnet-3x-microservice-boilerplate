@@ -1,41 +1,42 @@
 version: "2.4"
 services:
-  test-database:
-    image: mcr.microsoft.com/mssql/server
-    build: ms-sql-db
-    environment:
-      ACCEPT_EULA: Y
-      SA_PASSWORD: Top-Secret
-      MSSQL_PID: Developer
-    tty: true
-    ports:
-      - 1433:1433
-    volumes:
-      - database-data:/var/opt/mssql/data
-    healthcheck:
-      test: nc -z localhost 1433 || exit -1
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 20s
+#  test-database:
+#    image: mcr.microsoft.com/mssql/server
+#    build: ms-sql-db
+#    environment:
+#      ACCEPT_EULA: Y
+#      SA_PASSWORD: Top-Secret
+#      MSSQL_PID: Developer
+#    tty: true
+#    ports:
+#      - 1433:1433
+#    volumes:
+#      - database-data:/var/opt/mssql/data
+#    healthcheck:
+#      test: nc -z localhost 1433 || exit -1
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+#      start_period: 20s
 
   api:
     image: vice-boilerplate/api:1.0
-    build: api
+    build: 
+      context: .
+      dockerfile: api/Dockerfile-dev
     environment:
-      ASPNETCORE_URLS: https://localhost:5001;http://localhost:5000
-    depends_on:
-      test-database:
-        condition: service_healthy
+      ASPNETCORE_URLS: http://localhost:5000;
+#    depends_on:
+#      test-database:
+#        condition: service_healthy
     volumes: 
-      - ./api:/app/api
-      - ./tests:/app/tests
+      - ./:/app
+#      - ./tests:/app/tests
     ports:
       - 5000:5000
-      - 5001:5001
     tty: true
-    command:
-      dotnet watch --project tests test
+#    command:
+#      dotnet watch --project tests test
 
-volumes:
-  database-data:
+#volumes:
+#  database-data:

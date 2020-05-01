@@ -14,7 +14,7 @@ using Microsoft.Extensions.Logging;
 namespace api
 {
     public class Startup
-    {
+    { 
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;

@@ -1,10 +1,3 @@
-#FROM mcr.microsoft.com/dotnet/core/sdk:3.1
-#WORKDIR /app
-#COPY api.csproj ./
-#RUN dotnet restore
-#COPY . .
-#CMD dotnet run
-
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1.1-alpine3.10 AS base
 RUN apk add curl
 WORKDIR /app
@@ -12,6 +5,7 @@ EXPOSE 5000
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1.101-alpine3.10 AS build
 WORKDIR /src
+# run nuget restore in seperate layers so we don't have to run these on every build
 COPY ["api/api.csproj", "api/"]
 RUN dotnet restore "api/api.csproj"
 COPY . .

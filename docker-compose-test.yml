@@ -23,7 +23,7 @@ services:
     image: acme/api:1.0
     build: 
       context: . 
-      dockerfile: api/Dockerfile-dev
+      dockerfile: Api/Dockerfile-dev
 #    depends_on:
 #      test-database:
 #        condition: service_healthy
@@ -37,16 +37,16 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 10s
 
   tests:
     image: acme/integration-tests:1.0
-    build: integration-tests
+    build: IntegrationTests
     depends_on:
       api:
         condition: service_healthy
     volumes:
-      - ./integration-tests:/app
+      - ./IntegrationTests:/app
       - /app/node_modules
     tty: true
     command: npm run watch

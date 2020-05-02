@@ -1,10 +1,4 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1
-#WORKDIR /app
-#COPY api/api.csproj ./
-#RUN dotnet restore
-#COPY api api
-#EXPOSE 5000-5001
-#CMD dotnet watch run --no-restore --urls
 
 # install the .net core debugger
 RUN apt-get update

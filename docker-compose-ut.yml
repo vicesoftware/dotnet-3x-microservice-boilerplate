@@ -1,38 +1,42 @@
 version: "2.4"
 services:
-  db:
-    image: postgres:12.0-alpine
-    volumes:
-      - pg-data:/var/lib/postgresql/data
-      - ./db/init:/docker-entrypoint-initdb.d
-    ports:
-      - 5432
-    environment:
-      POSTGRES_DB: sampledb
-      POSTGRES_USER: pguser
-      POSTGRES_PASSWORD: topsecret
-    tty: true
-    healthcheck:
-      test: nc -z localhost 5432 || exit -1
-      interval: 5s
-      timeout: 5s
-      retries: 3
-      start_period: 5s
+#  test-database:
+#    image: mcr.microsoft.com/mssql/server
+#    build: ms-sql-db
+#    environment:
+#      ACCEPT_EULA: Y
+#      SA_PASSWORD: Top-Secret
+#      MSSQL_PID: Developer
+#    tty: true
+#    ports:
+#      - 1433:1433
+#    volumes:
+#      - database-data:/var/opt/mssql/data
+#    healthcheck:
+#      test: nc -z localhost 1433 || exit -1
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+#      start_period: 20s
 
   api:
-    image: acme/api:1.0
-    build: api
-    depends_on:
-      db:
-        condition: service_healthy
+    image: vice-boilerplate/api:1.0
+    build: 
+      context: .
+      dockerfile: api/Dockerfile-dev
+    environment:
+      ASPNETCORE_URLS: http://localhost:5000;
+#    depends_on:
+#      test-database:
+#        condition: service_healthy
     volumes: 
-      - ./api:/app/api
-      - ./tests:/app/tests
+      - ./:/app
+#      - ./tests:/app/tests
     ports:
       - 5000:5000
     tty: true
-    command:
-      dotnet watch --project tests test
+#    command:
+#      dotnet watch --project tests test
 
-volumes:
-  pg-data:
+#volumes:
+#  database-data:

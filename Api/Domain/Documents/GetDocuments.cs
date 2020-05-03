@@ -1,10 +1,8 @@
-using Api.Domain.Documents;
+using System.Collections.Generic;
 using MediatR;
 
-namespace Api.Controllers
+namespace Api.Domain.Documents
 {
-    public class GetDocuments
-    {
-        public class Ping : IRequest<Document> { }
-    }
+    public class GetDocuments : IRequest<IEnumerable<Document>>
+    { }
 }

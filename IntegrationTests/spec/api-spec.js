@@ -1,8 +1,8 @@
 const axios = require('axios');
 
 describe('Vice Software API test suite', () => {
-    describe('When calling GET /weatherforecast', () =>{
-        const url = 'http://api:5000/weatherforecast';
+    describe('When calling GET /api/documents', () =>{
+        const url = 'http://api:5000/api/documents';
 
         it('should return OK', async () => {
             console.log(url)
@@ -12,7 +12,7 @@ describe('Vice Software API test suite', () => {
 
         it('should return a description', async ()=> {
             const response = await axios.get(url);
-            expect(response.data.length).toBe(5);
+            expect(response.data.result.length).toBe(2);
         });
     });
 });

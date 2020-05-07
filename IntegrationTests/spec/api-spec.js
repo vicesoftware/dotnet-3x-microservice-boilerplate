@@ -12,7 +12,15 @@ describe('Vice Software API test suite', () => {
 
         it('should return a description', async ()=> {
             const response = await axios.get(url);
+            
             expect(response.data.result.length).toBe(2);
+            
+            expect(nameContains(response.data.result, "FOO")).toBe(true);
+            expect(nameContains(response.data.result, "Bar")).toBe(true);
+            
+            function nameContains(result, expectedName) {
+                return result.reduce((acc, cur) => acc || cur.name === expectedName, false)
+            }
         });
     });
 });

@@ -36,8 +36,8 @@ describe('CRUD /api/documents', () => {
             const putResponse = await axios.put(response.headers.location, updatedDocument, {
                 headers: {
                     'Accept': 'application/json',
-                }
-            }); 
+                } 
+            });
             
             expect(putResponse.status).toBe(204);
 

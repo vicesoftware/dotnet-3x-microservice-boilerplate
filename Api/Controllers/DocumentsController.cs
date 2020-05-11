@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using MediatR;
 using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
@@ -16,17 +17,23 @@ namespace Api.Controllers
     public class DocumentsController : ControllerBase
     {
         private readonly ViceContext _context;
+        private readonly IMediator _mediator;
 
-        public DocumentsController(ViceContext context)
+        public DocumentsController(ViceContext context, IMediator mediator)
         {
             _context = context;
+            _mediator = mediator;
         }
 
         // GET: api/Documents
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Document>>> GetDocuments()
         {
-            return await _context.Documents.ToListAsync();
+            var result = await _mediator.Send(new GetDocuments());
+
+            return new OkObjectResult(result);
+            // return new OkObjectResult(result);
+            // return await _context.Documents.ToListAsync();
         }
 
         // GET: api/Documents/5

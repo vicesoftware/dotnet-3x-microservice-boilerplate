@@ -20,7 +20,7 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Document>> Get()
+        public ActionResult<IEnumerable<Document>> Get()q
         {
             var result = _mediator.Send(new GetDocuments());
             return new OkObjectResult(result);

@@ -28,22 +28,7 @@ namespace Api
 
             services.AddMediatR(typeof(Startup));
 
-            var connectionString = Configuration.GetConnectionString("ViceConnectionString");
-
-            if (String.IsNullOrEmpty(connectionString))
-            {
-                Console.WriteLine("WARNING: Unable to read connection string ViceConnectionString from appsettings");
-                connectionString = Environment.GetEnvironmentVariable("ConnectionString");
-            }
-
-            if (String.IsNullOrEmpty(connectionString))
-            {
-                connectionString = "Server=localhost;Database=test-database;User Id=sa;Password=Top-Secret";
-                Console.WriteLine("WARNING: Unable to read connection string Environment Variable from appsettings");
-                // throw new Exception("You must specify a valid connection string either as an environment variable name ConnectionString or as an AppSetting named ConnectionString.");
-            }
-            
-            Console.WriteLine("Connecting to database: " + connectionString);
+            var connectionString = GetConnectionString();
             
             services.AddDbContext<ViceContext>(options =>
                 options.UseSqlServer(connectionString));
@@ -71,6 +56,33 @@ namespace Api
             {
                 endpoints.MapControllers();
             });
+        }
+
+        public string GetConnectionString()
+        { 
+            var connectionString = Configuration.GetConnectionString("ViceConnectionString");
+
+            if (String.IsNullOrEmpty(connectionString))
+            {
+                connectionString = Environment.GetEnvironmentVariable("ConnectionString");
+            }
+            else
+            {
+                Console.WriteLine("Using connection string from ViceConnectionString from appsettings");
+            }
+
+            if (String.IsNullOrEmpty(connectionString))
+            {
+                throw new Exception("You must specify a valid connection string either as an environment variable name ConnectionString or as an AppSetting named ConnectionString.");
+            }
+            else
+            {
+                Console.WriteLine("Using connection string from ConnectionString from Environment Variable");
+            }
+            
+            Console.WriteLine("Connecting to database: " + connectionString);
+
+            return connectionString;
         }
     }
     
